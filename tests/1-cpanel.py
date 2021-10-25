@@ -1,7 +1,10 @@
 # **** A BRIEF DESCRIPTION
 # All this test actually did was get and dump the stuff the application function actually receives
 # This is our environment and start_response function, of course, but we
-# needed to actually be able to find that out somehow, so this is how I did that
+# needed to actually be able to find that out somehow, so this is how I did that.
+# I've seen the auto-generated thing cpanel makes for python pages, so I kind-of
+# knew what to expect, but I had no idea what those variables should actually contain or
+# what they do, so. This.
 
 
 # https://www.w3schools.com/python/python_datatypes.asp
