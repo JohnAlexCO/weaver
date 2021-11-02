@@ -25,3 +25,16 @@ def main():
   return 'Aha! You found main()'
 ```
 we are able to have another page hosted at `./main`, and the first def will catch any `404` that's local.
+
+##### Day 2, November 2 2021, about 3 hours
+Re-designed from scratch, unable to get static files to work but can stably serve HTML and some types of other content with proper `mimetype`s. Declaring a page with multiple names now might look like
+```python
+@route
+def page(data):
+    return 'This page was called by the name %s' % data['uri']
+addnames(page, '/page /of /many /names /page/of /pagenames')
+```
+and changing the `mimetype` of a file looks like
+```python
+filetype(page, 'svg')
+```
