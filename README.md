@@ -40,7 +40,7 @@ filetype(page, 'svg')
 ```
 
 ##### NOTE:
-I do not know how much development happened (if any) between these two points because of poor notetaking between 0.0.2 and 0.0.05a
+I do not know how much development happened (if any) between these two points because of poor notetaking between 0.0.4 and 0.0.05a
 
 ##### Day "3", March 23 2022, 50 minutes
 Re-re-designed from scratch. Is a lot prettier, but does not support filetype definitions. This can be re-added later, but this massive update was done to allow building [Friendly](https://github.com/JohnAlexCO/Friendly). The same example from before looks like
