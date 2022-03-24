@@ -40,7 +40,7 @@ filetype(page, 'svg')
 ```
 
 ##### Day "3", March 23 2022, 50 minutes
-Re-re-designed from scratch. Is a lot prettier. The same example from before looks like
+Re-re-designed from scratch. Is a lot prettier, but does not support filetype definitions. This can be re-added later, but this massive update was done to allow building [Friendly](https://github.com/JohnAlexCO/Friendly). The same example from before looks like
 ```python
 from crawler import *
 
