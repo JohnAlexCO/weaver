@@ -38,3 +38,23 @@ and changing the `mimetype` of a file looks like
 ```python
 filetype(page, 'svg')
 ```
+
+##### Day "3", March 23 2022, 50 minutes
+Re-re-designed from scratch. Is a lot prettier. The same example from before looks like
+```python
+from crawler import *
+
+def page(request):
+    return 'This page was called by the name %s' % request.request
+
+Route(page, [
+    '/page',
+    '/of',
+    '/many',
+    '/names'
+])
+```
+And we can over-write the now-added default page by saying
+```python
+Route.default = Main
+```
