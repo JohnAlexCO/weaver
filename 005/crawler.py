@@ -16,7 +16,7 @@ class Manager:
 	
 	def __init__(self):
 		self.routes = {} # name -> function 
-		self.default = lambda: Default(data)
+		self.default = Default
 		
 	def __call__(self, function, names=[]):
 		if len(names)==0:
@@ -38,19 +38,34 @@ class Manager:
 	
 Route = Manager()
 
+# Create our own UID using the remote IP address and information about the remote device
+wrapnumber = 256 ** 8
+def uid(uddr, webview):
+	n = uddr.split('.')
+	ip = '%02x%02x%02x%02x' % ( int(n[0]), int(n[1]), int(n[2]), int(n[3]) )
+	ords = []
+	result = 0
+	for i in range(0, len(webview)): ords.append( ord(webview[i]) )
+	for i in range(0, len(ords)):
+		result += ( ords[i] << 8*i )
+	return ip + '%x' % (result % wrapnumber)
+		
 # Convert 'environ' into an object
 class e:
 	def __init__(self, environ):
 		self.request = environ['PATH_INFO']
 		self.global_request = environ['REQUEST_URI']
-		self.https = environ['HTTPS']
-		self.webview = environ['HTTP_USER_AGENT']
-		self.uri = environ['SCRIPT_URI']
 		self.query = environ['QUERY_STRING']
-		self.uid = environ['UNIQUE_ID']
 		self.uddr = environ['REMOTE_ADDR']
 		self.uport = environ['REMOTE_PORT']
-		self.server_software = environ['SERVER_SOFTWARE']
+		self.webview = environ['HTTP_USER_AGENT']
+		
+		self.uid = uid( self.uddr, self.webview )
+		#self.uid = environ['UNIQUE_ID']
+		
+		#self.uri = environ['SCRIPT_URI']
+		#self.https = environ['HTTPS']
+		#self.server_software = environ['SERVER_SOFTWARE']
 		#return self
 	
 
@@ -62,8 +77,8 @@ def app(environ, start_response):
 	
 	# Find a route from the request
 	Log( 'Received request from [%s]' % request.uid )
+	Log( '\t'+str(environ) )
 	Function = Route.get( request.request[1:] )
-	
 	# Pass the request object to that function and return the result
 	content = Function(request)
 	start_response('200 OK', [('Content-Type', 'text/html')])
