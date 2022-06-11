@@ -1,5 +1,5 @@
 # crawler
-A simple library for rapid website development, designed primarily for use with cPanel's `wsgi` wrapper.
+A simple library for rapid website development, designed primarily for use with cPanel
 
 #### Day-By-Day
 
