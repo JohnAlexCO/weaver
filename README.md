@@ -16,7 +16,7 @@ Re-designed from scratch, unable to get static files to work but can stably serv
 ##### Day "3", March 23 2022, 50 minutes
 Re-re-designed from scratch. Is a lot prettier, but does not support filetype definitions. This can be re-added later, but this massive update was done to allow building [Friendly](https://github.com/JohnAlexCO/Friendly). *(Additional text removed for brevity)*
 
-### Day "4", June 11 2022, 2 and a half hours
+##### Day "4", June 11 2022, 2 and a half hours
 Re-implemented the idea with `Node.js` instead of Python. 
 It can serve static files or regular text, but does not have a built-in routing system,
 and it does not actually process the request at all.
