@@ -20,3 +20,8 @@ Re-re-designed from scratch. Is a lot prettier, but does not support filetype de
 Re-implemented the idea with `Node.js` instead of Python. 
 It can serve static files or regular text, but does not have a built-in routing system,
 and it does not actually process the request at all.
+
+##### Day "5", July 7 2022, about 7 or so hours
+Rebuilt from scratch as a component of `gib` to be able to handle post requests and other data.
+This version is unable to serve files like "Day 4" did, but it should be a pretty easy fix of just
+adding a `getFile()` function that converts a file into a buffer and then checking before `get` requests if the name is of a file.
