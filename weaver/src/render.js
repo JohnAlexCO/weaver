@@ -47,7 +47,7 @@ function render(object) {
     var attrs = '';
     for ( let key in object ) {
         switch(key) {
-            case 'tag': case 'content': case 'innerHTML': break;
+            case 'tag': case 'content': break;
             case 'onload':
                 console.warn(
                     'NOTE: <object onload> may not function properly if it contains a " symbol'
@@ -56,6 +56,9 @@ function render(object) {
             default: attrs += ' '+ key + '="'+object[key]+'"'
         }
     }
+    // if the content was never actually defined
+    if ( object.content === undefined ) { object.content = '' }
+    
     // combine the tag and closers
     text =  '<'+ object.tag +
             attrs + '>'+
@@ -66,36 +69,3 @@ function render(object) {
 module.exports = {
     render
 }
-
-/*const fs = require('fs')
-var page = ( ObjectToHTML({
-    tag: 'body',
-    onload: "warm('eye')",
-    content: [
-        {
-            tag: 'style',
-            content: {
-                body: {
-                    height: '24px',
-                    width: '24px'
-                }
-            }
-        },
-        {
-            tag: 'script',
-            content: function warm(i){
-            console.log(i)
-            }
-        },
-        {
-            tag: 'h1',
-            content: 'Header 1'
-        },
-        {
-            tag: 'h3',
-            content: 'Yet another header'
-        },
-        'Hello, World!'
-    ]
-}))
-fs.writeFileSync('test.html', page)*/
