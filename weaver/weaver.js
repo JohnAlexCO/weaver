@@ -4,9 +4,9 @@ const decode = require('./src/decode.js')
 const files = require('./src/files.js')
 const get = require('./src/get.js')
 const post = require('./src/post.js')
+const { render } = require('./src/render.js')
 const pre = require('./src/request.js') // -> const hash = require('./src/get.js')
 const { error } = require('./src/errors.js') // -> const fs = require('fs')
-
 const id_required = pre.id_required
 
 // =========================================== PAGE APPEND FUNCTIONS
@@ -69,5 +69,5 @@ var server = http.createServer(function(request, response) {
 
 // =========================================== EXPORTS
 module.exports = {
-    server, newFile, newGet, newPost, id_required
+    server, newFile, newGet, newPost, id_required, render
 }
