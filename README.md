@@ -92,7 +92,7 @@ So, setting the font-family and window colors might look like this:
     
 ## And My Hello World?
 "Hello World" is trivially easy, so let's instead take some text input from the user, and then return it to them when they hit `<submit>`.
-No CSS in this example, just to keep it brief:
+No JavaScript/CSS in this example, just to keep it brief:
 ```javascript
 const weaver = require("./weaver.js")
 weaver.newGet("/", (request)=>{ return {
