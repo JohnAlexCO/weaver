@@ -3,11 +3,6 @@ A simple library for rapid website development, designed primarily for use with 
 
 *formerly named crawler*
 
-##### Day "6", Weaver 0.0.0
-Repurposed the code from `https://johnalex.co/studio` and `https://johnalex.co/soap` to build a prototype of Weaver.
-Weaver will use the old Crawler logo, page, et cet, since it's intended to perform the same purpose.
-It's an entirely new code-base written in JavaScript that handles files and post requests, too.
-
 ## Basic Use
 1. Download and unzip Weaver into your project directory.
 2. Write an `app.js` file, like so
@@ -27,4 +22,72 @@ then upload the unzipped Weaver files to your server, too.
 4. Refresh the node application you created and it should be running.
 
 ## Documentation
-I will add this in later, but currently, my computer is dying, so this is what ye get
+
+### Routing 
+Routing with Weaver is super straight-forward. The **newGet** and **newPost** functions both take
+a *route* and a *function* as arguments, where the function accepts a *request*-object.
+The request object is a normal `http` object, but that has been guarenteed to also contain the following attributes:
+- `userID`: a unique number that identifies who made an incoming request (if `ID_REQUIRED ` is set `false` then this might be set to `"No_ID"`)
+- `url`: the path to the resource the request is for, minus any query data
+- `method`: the request method, such as *POST* or *GET*.
+- `query`: any query data attached to the url
+- (POST-requests only) `postData`: an object made from the name-value pairs of a regular post request. If no data is passed into a post request,
+weaver returns a default *Status 400: BAD REQUEST* response. To override this behavior, create a post route named `"nodata"` 
+
+### Creating Pages
+Weaver also has a *render* function that converts properly-formatted JavaScript objects into HTML Documents.
+The render function accepts an object (or array of objects) as the argument.
+
+#### HTML
+\**<html>**objects (any tag besides `script` or `style`) expect to have the `tag` attribute.
+Any innerHTML, children, or other content should be put within the `content` attribute.
+A *<div>* object with some text and a header within it might look something like this:
+```javascript
+{ tag: 'div',
+  content: [
+    { tag: 'h1', content: 'Header 1' },
+    'Hello, World!'
+  ]
+}
+```
+and should properly be rendered to HTML as
+```html
+<div><h1>Header 1</h1>Hello, World!</div>
+```
+
+#### Embed JavaScript
+**<script>** objects (`{tag: "script"}`) expect the content to be either a function, or an array of functions.
+These functions should ideally be declared within the array itself, both for readability and to ensure
+that the renderer captures the name of the function(s). Take this very simple example:
+```javascript
+{ tag: 'script',
+  content: function warm(i){
+    console.log(i)
+}}
+```
+When the renderer gets to this object, it will properly generate HTML from it
+```html
+<script>function warm(i) {
+  console.log(i)
+}</script>
+```
+
+#### CSS Stylesheets
+**<style>** objects (`{tag: "style"}`) expects a regular JSON-like object as its content, not too dissimilar from regular CSS.
+So, setting the font-family and window colors might look like this:
+```javascript
+{ tag: 'style',
+  content: {
+    body: {
+      'color': 'white',
+      'background-color': 'black',
+      'font-family': 'verdana'
+    },
+    p: {
+      'font-size': '14px'
+    }
+  }
+}
+```
+
+
