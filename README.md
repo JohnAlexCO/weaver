@@ -39,7 +39,7 @@ Weaver also has a *render* function that converts properly-formatted JavaScript 
 The render function accepts an object (or array of objects) as the argument.
 
 #### HTML
-\**<html>**objects (any tag besides `script` or `style`) expect to have the `tag` attribute.
+**\<html>** objects (any tag besides `script` or `style`) expect to have the `tag` attribute.
 Any innerHTML, children, or other content should be put within the `content` attribute.
 A *<div>* object with some text and a header within it might look something like this:
 ```javascript
