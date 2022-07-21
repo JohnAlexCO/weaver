@@ -110,7 +110,7 @@ weaver.newGet("/", (request)=>{ return {
     })
 }})
     
-weaver.newPost("/"), (request)=>{ return {
+weaver.newPost("/", (request)=>{ return {
     status: 200,
     mime: "text/html",
     content: weaver.render({
