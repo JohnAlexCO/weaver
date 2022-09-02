@@ -39,6 +39,7 @@ function render(object) {
     if ( Array.isArray(object) ) { var text = ''; for(let i in object){ text+= render(object[i]) }; return text }
 
     // If it's an object, check if tag SCRIPT or STYLE
+    if (object == undefined) { return '' } // Explanation below after function
     if (object.tag == 'script') { return ObjectToHTML_Script(object) }
     if (object.tag == 'style') { return ObjectToHTML_Style(object) }
     
@@ -62,6 +63,15 @@ function render(object) {
             object.content + '</'+ object.tag +'>'
     return text
 }
+/*
+    Okay, so the line   -> if (object == undefined) { return '' }
+    was added because some items do not contain content, such as <img> elements,
+    the line            -> object.content = render(object.content)
+    causes fatal errors. To fix this without radically changing how this renderer behaves
+    and preserving its very simple nature, 
+    Since object.content is what's passed to the render function, 
+    we need to catch wht happens when the *object passed in* is undefined, not the property itself.
+*/
 
 module.exports = {
     render
