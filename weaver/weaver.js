@@ -12,6 +12,8 @@ const pre = require('./src/request.js') // -> const hash = require('./src/get.js
 const idRequired = pre.id_required
 const getPrefunction = get.prefunction
 const postPrefunction = post.prefunction 
+const getList = get.list 
+const postList = post.list 
 
 // =========================================== PAGE APPEND FUNCTIONS
 function newFile(route, filename) { get.append( route, ()=> { return files.read(filename) } ) }
@@ -73,5 +75,6 @@ var server = http.createServer(function(request, response) {
 
 // =========================================== EXPORTS
 module.exports = {
-    server, newFile, newGet, newPost, idRequired, render, getPrefunction, postPrefunction
+    server, newFile, newGet, newPost, idRequired, render, 
+    getPrefunction, postPrefunction, getList, postList
 }
