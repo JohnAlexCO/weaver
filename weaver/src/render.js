@@ -36,18 +36,18 @@ function render(object) {
     // Check if an object, function, string, et cet
     if ( typeof object === 'string' ) { return object }
     if ( typeof object === 'function') { return object.toString(); } // https://turreta.com/2017/02/04/javascript-convert-function-to-string-and-back/
-    if ( Array.isArray(object) ) { var text = ''; for(let i in object){ text+= ObjectToHTML(object[i]) }; return text }
+    if ( Array.isArray(object) ) { var text = ''; for(let i in object){ text+= render(object[i]) }; return text }
 
     // If it's an object, check if tag SCRIPT or STYLE
     if (object.tag == 'script') { return ObjectToHTML_Script(object) }
     if (object.tag == 'style') { return ObjectToHTML_Style(object) }
     
     // combine all the attributes
-    object.content = ObjectToHTML(object.content) // make sure to convert whatever it contains first 
+    object.content = render(object.content) // make sure to convert whatever it contains first 
     var attrs = '';
     for ( let key in object ) {
         switch(key) {
-            case 'tag': case 'content': break;
+            case 'tag': case 'content': case 'innerHTML': break;
             case 'onload':
                 console.warn(
                     'NOTE: <object onload> may not function properly if it contains a " symbol'
@@ -56,9 +56,6 @@ function render(object) {
             default: attrs += ' '+ key + '="'+object[key]+'"'
         }
     }
-    // if the content was never actually defined
-    if ( object.content === undefined ) { object.content = '' }
-    
     // combine the tag and closers
     text =  '<'+ object.tag +
             attrs + '>'+
