@@ -1,19 +1,22 @@
 // =========================================== IMPORT DEPENDENCIES
 const http = require('http')
 const decode = require('./src/decode.js')
+const { render } = require('./src/render.js')
+const { error } = require('./src/errors.js')
 const files = require('./src/files.js')
 const get = require('./src/get.js')
 const post = require('./src/post.js')
-const { render } = require('./src/render.js')
 const pre = require('./src/request.js') // -> const hash = require('./src/get.js')
-const { error } = require('./src/errors.js') // -> const fs = require('fs')
-const id_required = pre.id_required
+
+// expose certain internals to external calling
+const idRequired = pre.id_required
+const getPrefunction = get.prefunction
+const postPrefunction = post.prefunction 
 
 // =========================================== PAGE APPEND FUNCTIONS
 function newFile(route, filename) { get.append( route, ()=> { return files.read(filename) } ) }
 function newGet(route, func){ get.append(route, func) }
 function newPost(route, func){ post.append(route, func) }
-// TODO remove -- this is a comment for demonstration purposes of git flow branch policy
 
 // ========================================== ROUTING REQUESTS
 function route(request) {
@@ -28,7 +31,7 @@ function route(request) {
     try { 
         switch(request.method) {
             case 'GET': 
-                try { var page = get.process(request); 
+                try { var page = get.process(request);
                 if (page.content !== undefined ) { return page } 
                 else { return error(404, request.userID, request.url) } } 
                 catch(err) {  return error(500, request.userID, request.url, err) } break;
@@ -70,5 +73,5 @@ var server = http.createServer(function(request, response) {
 
 // =========================================== EXPORTS
 module.exports = {
-    server, newFile, newGet, newPost, id_required, render
+    server, newFile, newGet, newPost, idRequired, render, getPrefunction, postPrefunction
 }
