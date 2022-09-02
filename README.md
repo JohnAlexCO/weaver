@@ -158,5 +158,5 @@ and after doing that, refresh your Node application and you should be done!
 
 # Examples
 
-My personal website, [JohnAlex.CO](https://johnalex.co), is mostly built and hosted using Weaver.
-I'm working on mitigating the rest of its codebase over, too, and building some simple applications using it in the very near future.
+My personal website, [JohnAlex.CO](https://johnalex.co), was built using Weaver.
+I'm planning on building more applications in the future, and using Weaver as the library for building the frontend and UI
