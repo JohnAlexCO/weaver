@@ -1,116 +1,126 @@
 # weaver
-A simple library for rapid website development, designed primarily for use with cPanel
+A simple library for simple website development, designed primarily for use with cPanel.
+Your CSS, HTML, and both your server-side and client-side JavaScript can all be written in one place!
+Using weaver makes it incredibly simple to see how the pieces of your application interact,
+and is primarily intended for allowing the rapid deployment of prototypes for interactive browser software,
+but is also fantastic for writing static or dynamically generated sites.
 
-*formerly named crawler*
-
-## Basic Use
+### The TLDR of How to Use It
 1. Download and unzip Weaver into your project directory.
-2. Write an `app.js` file, like so
+2. Write an `app.js` file, *such as our example [app.js](./app.js)*
+4. Create a cPanel node application and replace the auto-generated `app.js` with the one you wrote
+5. Clone Weaver into the cPanel application's directory 
+6. Refresh the node application you created
+
+
+### All Features
+
+- `newFile` takes two params: a route, and a filename that it will convert into a response
+- `newGet` takes two params: a route, and a function that accepts a request
+- `newPost` takes two params: a route, and a function that accepts a request
+- `idRequired` takes one param: a boolean, telling Weaver whether or not it should require a valid user-agent to serve a response. The default is `true`
+- `getPrefunction` takes one param: a function that accepts a request. This will be run before every get request and the return value disgarded
+- `postPrefunction` takes one param: a function that accepts a request. This will be run before every post request and the return value disgarded
+- `getList` takes no params: it returns a list of the names of all GET routes
+- `postList` takes no params: it returns a list of the names of all POST routes
+- `server.listen` takes one optional param: the port number that node-http should listen over
+
+# Introductory Tutorial
+
+The basic control flow for weaver is super simple:
+
+1. Define a bunch of routes as functions that take a request
+2. Tell Weaver you're ready to host (and optionally over what port)
+
+That's pretty much it. So how do you get started?
+
+First, of course, is to import weaver for your app to use. 
+I recommend cloning weaver into the project directory within a folder named weaver, and then importing it like so:
 ```javascript
-const weaver = require('./weaver.js')
-weaver.newGet('/', (request)=>{ return {
-    status: 200,
-    mime: 'text/html',
-    content: '<h3>Hello, World!</h3>'
-} })
-weaver.newFile('/favicon.ico', './static/favicon.ico')
-weaver.id_required = false // disables the requirement that remote addr exists; useful for local testing
-weaver.server.listen(8080) // remove the port number when you upload this code to cPanel
+const weaver = require('./weaver/weaver.js')
 ```
-3. Create a cPanel node application and replace the auto-generated `app.js` with the one you wrote,
-then upload the unzipped Weaver files to your server, too.
-4. Refresh the node application you created and it should be running.
+It might look a little weird, but it keeps the directory nice and tidy.
+Then you're going to want to define some routes. 
+To keep it really simple, I'm going to do one **GET** and one **POST**,
+where one is a form that takes data and the other returns the submitted data to the user.
 
-## Documentation
-
-### Routing 
-Routing with Weaver is super straight-forward. The **newGet** and **newPost** functions both take
-a *route* and a *function* as arguments, where the function accepts a *request*-object.
-The request object is a normal `http` object, but that has been guarenteed to also contain the following attributes:
-- `userID`: a unique number that identifies who made an incoming request (if `ID_REQUIRED ` is set `false` then this might be set to `"No_ID"`)
-- `url`: the path to the resource the request is for, minus any query data
-- `method`: the request method, such as *POST* or *GET*.
-- `query`: any query data attached to the url
-- (POST-requests only) `postData`: an object made from the name-value pairs of a regular post request. If no data is passed into a post request,
-weaver returns a default *Status 400: BAD REQUEST* response. To override this behavior, create a post route named `"nodata"` 
-
-### Creating Pages
-Weaver also has a *render* function that converts properly-formatted JavaScript objects into HTML Documents.
-The render function accepts an object (or array of objects) as the argument.
-
-#### HTML
-\**<html>**objects (any tag besides `script` or `style`) expect to have the `tag` attribute.
-Any innerHTML, children, or other content should be put within the `content` attribute.
-A *<div>* object with some text and a header within it might look something like this:
+### Responses
+All route functions should return an object that contains a Status code, a MIME-type, and the content itself.
+A simple hello world response might look like
 ```javascript
-{ tag: 'div',
-  content: [
-    { tag: 'h1', content: 'Header 1' },
-    'Hello, World!'
-  ]
-}
+return { status: 200, mime: 'raw', content: 'Hello, World!' }
 ```
-and should properly be rendered to HTML as
-```html
-<div><h1>Header 1</h1>Hello, World!</div>
-```
+Currently, Weaver supports the html, zip, json, png, jpg, svg, txt, md, js, and css MIME-types,
+and the status codes 200, 400, 404, 405, 413, and 500. I plan on adding in support for the other main ones and for custom error-handling, soon.
 
-#### Embed JavaScript
-**<script>** objects (`{tag: "script"}`) expect the content to be either a function, or an array of functions.
-These functions should ideally be declared within the array itself, both for readability and to ensure
-that the renderer captures the name of the function(s). Take this very simple example:
-```javascript
-{ tag: 'script',
-  content: function warm(i){
-    console.log(i)
-}}
-```
-When the renderer gets to this object, it will properly generate HTML from it
-```html
-<script>function warm(i) {
-  console.log(i)
-}</script>
-```
+### Handling Requests
+We'll start off by defining our first GET route using `weaver.newGet`
+and passing it two arguments: the name of the route (including the leading `/`), and a function that accepts a request.
+The function needs to give a valid response given a `request` object;
+this is a normal [node-http request](https://nodejs.org/api/http.html) object,
+except that a few attributes are generated and guaranteed by Weaver:
+- `userID` is a unique string identifying the user making a request. If `weaver.idRequired(false)` was set, then this might also be set to `"No_ID"`.
+- `url` is the resource the user is requesting
+- `query` is the entire query string without additional processing
+- `method` will return the request method, such as `"POST"` or `"GET"`
+- and for POST requests, `postData` is an object made from the name-value pairs of a regular post request. If no data is passed into a post request, weaver returns a default 400 BAD REQUEST error response. To override this behavior, create a post route named "nodata"
 
-#### CSS Stylesheets
-**<style>** objects (`{tag: "style"}`) expects a regular JSON-like object as its content, not too dissimilar from regular CSS.
-So, setting the font-family and window colors might look like this:
+So, that hello world response could be hooked up to a get request just like this:
 ```javascript
-{ tag: 'style',
-  content: {
-    body: {
-      'color': 'white',
-      'background-color': 'black',
-      'font-family': 'verdana'
-    },
-    p: {
-      'font-size': '14px'
+weaver.newGet( '/', (request)=>{
+    return {
+        status: 200,
+        mime: 'raw',
+        content: 'Hello, World! How\'s the weather today?'
     }
-  }
-}
+})
 ```
-    
-## And My Hello World?
-"Hello World" is trivially easy, so let's instead take some text input from the user, and then return it to them when they hit `<submit>`.
-No JavaScript/CSS in this example, just to keep it brief:
+
+### Creating a Page
+So, how are we going to create a form? "I thought this didn't require writing any HTML", I hear you saying. And that's true! 
+Weaver has a `render` function that takes an object and converts it into a webpage! It's super easy to use, too, and can be used
+to create static, or dynamic content. In this overview, though, I'm only going to show static content rendering. 
+
+`weaver.render` expects either an object or an array containing objects. 
+Each object should have, at the very least, a tag.
+They can also have `content`, which can be either a string, an object to be rendered, or an array of objects to be rendered.
+Any other properties of these objects will be attached to the rendered object, too.
+
+Calling render on and object like this
 ```javascript
-const weaver = require("./weaver.js")
-weaver.newGet("/", (request)=>{ return {
-    status: 200,
-    mime: "text/html",
-    content: weaver.render({
-      tag: "body",
-      content: [
-        { tag: "form", method: "post", action: "./", content: [
-            { tag: "input", id: "text", name: "text" },
-            { tag: "input", type: "submit" }
-          ]
-        }
-      ]
-    })
-}})
-    
-weaver.newPost("/"), (request)=>{ return {
+weaver.render([
+    { tag: "form", method: "post", action: "./post", content: [
+    { tag: "input", id: "text", name: "text" },
+    { tag: "input", type: "submit" }
+])
+```
+should produce the following HTML output:
+```html
+'<form method="post" action="./">
+    <input id="text" name="text"></input>
+    <input type="submit"></input>
+</form>'
+```
+And connecting this to a route is as simple as hooking it up to `weaver.newGet`
+```javascript
+form = weaver.render([
+    { tag: "form", method: "post", action: "./post", content: [
+    { tag: "input", id: "text", name: "text" },
+    { tag: "input", type: "submit" }
+])
+weaver.newGet( '/', (request)=>{
+    return { status: 200, mime: 'raw', content: form }
+})
+```
+You could also move the render function to be within the routing function if, say, you wanted the page to include the session ID or other dynamically generated content.
+
+### Handling Post Requests
+Now that we have a form attached to the `"/"` route that points to `/post`, we should actually hook something up there.
+Handling post requests is mostly the same as get requests. We give `weaver.newPost` a route name, and a function that takes a `request` object.
+The main difference is that this object will now include `request.postData`, a dictionary object containing the response we received from the user.
+Here, I'm just going to tell weaver to convert it to text and reply with it as paragraph text.
+```javascript
+weaver.newPost("/post", (request)=>{ return {
     status: 200,
     mime: "text/html",
     content: weaver.render({
@@ -118,6 +128,35 @@ weaver.newPost("/"), (request)=>{ return {
         content: (request.postData).toString()
     })
 }})
-weaver.server.listen()
 ```
+It really is that straight-forward! And now, the only thing we need before we can open our browser and see this page is to 
+tell Weaver to start listening over a specific port.
 
+### Listening
+
+This section is going to be very brief: weaver has a `weaver.server.listen()` function that 
+accepts a port number and invokes the `node-http` listen function. If you leave it empty, it uses the default;
+when you upload your production code to somewhere like cPanel, make sure to leave it empty.
+
+### Hosting using cPanel
+
+This section of the tutorial assumes you have a version of cPanel set up on your server that has node support baked in.
+Scroll down to the **Software** tab of the Dashboard and click *Setup Node.js App* 
+
+![image](https://user-images.githubusercontent.com/81481181/188233234-d76d0657-1871-40b3-a2ba-fc7abd83589c.png)
+
+then click *Create Application* at the top-right.
+
+![image](https://user-images.githubusercontent.com/81481181/188233545-4be35a7d-78c8-4901-ad76-0a7a7a555dd7.png)
+
+When you're at this scrren, I recommend setting it to use the closest-to-current version of Node available 
+and using either the default application name, or `app.js`
+Then you can hit *Create* at the top-right. Now, whatever directory you chose to use as the Application root
+will be populated with an `app.js` file that you'll want to replace with your code.
+You should also upload the unzipped Weaver source to this directory,
+and after doing that, refresh your Node application and you should be done!
+
+# Examples
+
+My personal website, [JohnAlex.CO](https://johnalex.co), is mostly built and hosted using Weaver.
+I'm working on mitigating the rest of its codebase over, too, and building some simple applications using it in the very near future.
