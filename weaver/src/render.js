@@ -26,7 +26,13 @@ function ObjectToHTML_Style(object) {
         }
     var string = ''; // https://stackoverflow.com/questions/5612787/converting-an-object-to-a-string
     for ( let item in object.content ) {
-        string += item +':'+ JSON.stringify( object.content[item] ) +'\n'
+        console.log(item)
+        string += item + ' {'
+        for ( let subitem in object.content[item] ) {
+            string += '   \n\t'+subitem + ': ' + object.content[item][subitem] + ';' 
+        }
+        string += '\n}\n'
+        //string += item +' '+ JSON.stringify( object.content[item] ) +'\n'
     }
     return '<style>'+string+'</style>' 
 }
