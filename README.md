@@ -1,6 +1,6 @@
 # weaver
 A simple library for simple website development, designed primarily for use with cPanel.
-Your CSS, HTML, and both your server-side and client-side JavaScript can all be written in one place!
+Your CSS, HTML, and both your server-side and client-side JavaScript can all be written in one place as just JavaScript!
 Using weaver makes it incredibly simple to see how the pieces of your application interact,
 and is primarily intended for allowing the rapid deployment of prototypes for interactive browser software,
 but is also fantastic for writing static or dynamically generated sites.
@@ -91,7 +91,7 @@ Calling render on and object like this
 weaver.render([
     { tag: "form", method: "post", action: "./post", content: [
     { tag: "input", id: "text", name: "text" },
-    { tag: "input", type: "submit" }
+    { tag: "input", type: "submit" }]
 ])
 ```
 should produce the following HTML output:
@@ -106,7 +106,7 @@ And connecting this to a route is as simple as hooking it up to `weaver.newGet`
 form = weaver.render([
     { tag: "form", method: "post", action: "./post", content: [
     { tag: "input", id: "text", name: "text" },
-    { tag: "input", type: "submit" }
+    { tag: "input", type: "submit" }]
 ])
 weaver.newGet( '/', (request)=>{
     return { status: 200, mime: 'raw', content: form }
