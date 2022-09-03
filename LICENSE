@@ -1,4 +1,4 @@
-    Weaver - a simple JavaScript web-framework/web-library
+# Weaver - JavaScript Web Framework/library
     Copyright (C) 2022  John Alex Lathrop
 
     This program is free software: you can redistribute it and/or modify
@@ -633,4 +633,4 @@ an absolute waiver of all civil liability in connection with the
 Program, unless a warranty or assumption of liability accompanies a
 copy of the Program in return for a fee.
 
-                     END OF TERMS AND CONDITIONS 
+                     END OF TERMS AND CONDITIONS
