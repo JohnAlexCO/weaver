@@ -1,3 +1,5 @@
+<img src="./art/weaver_corner.png" width="200px" align="left"/>
+
 # weaver
 A simple library for simple website development, designed primarily for use with cPanel.
 Your CSS, HTML, and both your server-side and client-side JavaScript can all be written in one place as just JavaScript!
