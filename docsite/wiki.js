@@ -1,4 +1,4 @@
-const weaver = require("../weaver.js")
+const weaver = require("./weaver.js")
 const stamp = require("./formatDate.js") // this is borrowed code 
 const fs = require("fs")
 const md = require("showdown") // https://github.com/showdownjs/showdown
@@ -56,28 +56,27 @@ const header = weaver.render([
 
 // GET ALL FILES IN PAGES DIR AND CREATE RENDER FUNCTIONS
 fs.readdirSync('./pages').forEach(filename => {
-    weaver.newGet('/'+filename, (request)=>{
+    weaver.newGet('/weaver/'+filename, (request)=>{
         var converter = new md.Converter()
         var content = fs.readFileSync('./pages/'+filename, {encoding:'utf-8'})
         return {
             status: 200,
-            mime: 'html',
+            mime: 'text/html',
             content:    header+
                         '<div><i>docs/'+filename+'</i></div>'+
                         converter.makeHtml(content)+
-                        '<a href="index.md">*** RETURN TO THE HOME PAGE ***</a>'
+                        '<a href="">*** RETURN TO THE HOME PAGE ***</a>'
         }
     })
 });
 // PLUS THE HOME PAGE ITSELF ; THIS IS ACTUALLY REDUNDANT CODE AS-IS BUT IT MEANS '/' WORKS RIGHT
-weaver.newGet('/', (request)=> { 
+weaver.newGet('/weaver', (request)=> { 
     var converter = new md.Converter()
     var content = fs.readFileSync('./pages/index.md', {encoding:'utf-8'})
         return {
         status: 200,
-        mime: 'html',
+        mime: 'text/html',
         content: header+ converter.makeHtml(content)
     }
 })
 weaver.server.listen()
-
