@@ -48,6 +48,8 @@ const header = weaver.render([
     a: {'text-decoration':'none', color:'orange'},
     i: {color:'#cb0'}
     }},
+    { tag: 'link', rel:'icon', type:'image/png', href:'https://github.com/JohnAlexCO/weaver/blob/main/art/weaver.png?raw=true'},
+    { tag: 'title', content:'weaver by JohnAlex.CO'},
     { tag: 'div',content: [
         {tag: 'img', src:'https://github.com/JohnAlexCO/weaver/blob/main/art/weaver_corner.png?raw=true', width:'200px' },
         {tag: 'h1', content:'weaver'},
