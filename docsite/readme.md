@@ -1,4 +1,4 @@
-<img src="./art/weaver_corner.png" width="200px" align="left"/>
+<img src="../art/weaver_corner.png" width="200px" align="left"/>
 
 # Documentation Source
 
