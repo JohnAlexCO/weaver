@@ -1,6 +1,11 @@
-![Weaver logo](https://modula.dev/weaver.png)
-# Weaver
-A simple library for quick websites
+<header><a href="https://modula.dev/weaver">
+    <title>Weaver &ndash; Modula.dev</title>
+    <img class="logo" src="https://modula.dev/weaver.png" />
+    <link rel="stylesheet" href="https://modula.dev/weaver.css">
+    <h1>Weaver</h1>
+</a></header>
+<div class="content">
+is the JavaScript gluecode at the heart of Modula's website
 
 ## License
 This project is made available by Modula under the
@@ -16,7 +21,7 @@ to your project's working directory
 
 ## Usage
 Using Weaver to begin serving a JavaScript site is a short-few simple steps.
-Copy the Weaver source code into your project's directory, `import` it,
+Copy the Weaver source code into your project's directory, `require` it,
 initialize the `weaver.router`, add some file paths or functions as routes,
 and then hand-off control by calling `weaver.serve` at the end.
 

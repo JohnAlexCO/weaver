@@ -108,7 +108,7 @@ function serveFile(mime, path) {
     try { return {
         code: 200,
         mime: mime,
-        body: fs.readFileSync(path, {encoding: "utf-8"})
+        body: fs.readFileSync(path) // {encoding: "utf-8"}
     }}
     catch(err) {
         error(`cannot serve missing file ${path}`);
